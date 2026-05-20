@@ -147,7 +147,6 @@ button:active, .link-btn:active { transform: translateY(0); }
   padding: 20px;
 }
 
-/* Googleフォーム用リンクボタン */
 .form-btn {
   background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
   box-shadow: 0 4px 14px rgba(67, 233, 123, 0.45);
@@ -264,45 +263,27 @@ const LOGO_IMG = "logo.png";
 const FORM_URL = "https://forms.gle/s6AeXA7kteuu8rCD7";
 
 const types = {
-  leader: {
-    name: "リーダー型", icon: "👑",
-    desc: "周囲をまとめる力があり、状況判断にも優れています。地域の見守り活動では中心的な役割を担い、チームを引っ張る存在です。困っている人を見つけると率先して動き、周囲を巻き込んで課題解決に導く力があります。",
-    img: "result_leader.png"
+  info: {
+    name: "情報支援タイプ",
+    icon: "📡",
+    desc: "情報を集めたり、伝えたりすることで地域を支えるタイプです。SNSや掲示板での発信、声かけ、見守り情報の共有など、コミュニケーションを通じて地域とつながる力があります。直接現場に出なくても、情報の輪を広げることで多くの人を支えられる存在です。",
+    img: "result_info.png"
   },
-  guardian: {
-    name: "ガーディアン型", icon: "🛡️",
-    desc: "責任感が強く、継続的に見守ることが得意なタイプです。地域の安全を守る意識が高く、日々の積み重ねを大切にします。目立たなくても確実に役割を果たし、安心感を与える存在として活躍できます。",
-    img: "result_guardian.png"
-  },
-  active: {
-    name: "アクティブ型", icon: "🏃",
-    desc: "フットワークが軽く、行動力に優れています。地域イベントや巡回など、体を動かす活動に向いています。新しいことにも積極的に挑戦し、現場での対応力が高いのが特徴です。",
-    img: "result_active.png"
-  },
-  supporter: {
-    name: "サポーター型", icon: "🤝",
-    desc: "人の話をよく聞き、支えることが得意なタイプです。困っている人に寄り添い、安心感を与えることができます。チームの裏方としても重要な役割を担い、周囲の活動を円滑に進めます。",
-    img: "result_supporter.png"
-  },
-  planner: {
-    name: "プランナー型", icon: "📋",
-    desc: "計画を立てるのが得意で、全体を見渡す力があります。見守り活動のスケジュール管理や仕組みづくりに向いています。効率的で無理のない活動を支える重要な存在です。",
-    img: "result_planner.png"
-  },
-  creator: {
-    name: "クリエイター型", icon: "💡",
-    desc: "発想力が豊かで、新しいアイデアを生み出すのが得意です。地域の見守り活動に新しい視点を取り入れ、広報や企画などで活躍できます。人を惹きつける工夫ができるタイプです。",
-    img: "result_creator.png"
+  action: {
+    name: "参加活動タイプ",
+    icon: "🚶",
+    desc: "実際に体を動かして地域に関わるのが得意なタイプです。パトロールやイベント、清掃活動など、現場での活動に向いています。フットワークが軽く、人と顔を合わせて関わることで地域に安心感を届けられる存在です。",
+    img: "result_action.png"
   }
 };
 
 const questions = [
-  { text: "人をまとめる役割を任されることが多い", yes: "leader", no: "supporter" },
-  { text: "コツコツと継続することが得意だ", yes: "guardian", no: "active" },
-  { text: "体を動かす活動が好きだ", yes: "active", no: "planner" },
-  { text: "人の相談に乗ることが多い", yes: "supporter", no: "leader" },
-  { text: "計画を立てるのが好きだ", yes: "planner", no: "creator" },
-  { text: "新しいアイデアを考えるのが好きだ", yes: "creator", no: "guardian" }
+  { text: "SNSや掲示板で情報を発信するのが好きだ",       yes: "info",   no: "action" },
+  { text: "体を動かして活動するのが好きだ",                 yes: "action", no: "info"   },
+  { text: "人とじっくり話を聞いたり伝えたりするのが得意だ", yes: "info",   no: "action" },
+  { text: "イベントや集まりに参加するのが好きだ",           yes: "action", no: "info"   },
+  { text: "必要な情報を集めて整理するのが得意だ",           yes: "info",   no: "action" },
+  { text: "屋外での見回りや活動に抵抗がない",               yes: "action", no: "info"   }
 ];
 
 let current = 0;
