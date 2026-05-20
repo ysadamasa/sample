@@ -1,0 +1,435 @@
+<!-- File: index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地域見守り隊 適性タイプ診断</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Zen Maru Gothic', system-ui, sans-serif;
+  font-weight: 500;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ffd3e0 100%);
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 背景の装飾バブル */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  z-index: 0;
+  filter: blur(40px);
+  opacity: 0.5;
+}
+body::before {
+  width: 300px;
+  height: 300px;
+  background: #ffeb99;
+  top: -100px;
+  left: -100px;
+  animation: float 8s ease-in-out infinite;
+}
+body::after {
+  width: 250px;
+  height: 250px;
+  background: #ffb3d1;
+  bottom: -80px;
+  right: -80px;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -30px); }
+}
+
+.container {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 28px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(255, 130, 100, 0.25),
+              0 4px 12px rgba(0,0,0,0.06);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  border: 4px solid #fff;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ロゴ画像 */
+.logo {
+  width: 80%;
+  max-width: 360px;
+  height: auto;
+  margin: 0 auto 16px;
+  display: block;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 900;
+  margin: 12px 0 16px;
+  color: #ff6f61;
+  line-height: 1.5;
+}
+
+.question-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #444;
+  background: #fff8ee;
+  padding: 20px 16px;
+  border-radius: 16px;
+  margin: 16px 0 24px;
+  border: 3px dashed #ffc857;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
+  margin: 16px 0;
+}
+
+button {
+  width: 100%;
+  padding: 18px;
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.yes {
+  background: linear-gradient(135deg, #6dd5a7 0%, #43c08a 100%);
+  box-shadow: 0 4px 12px rgba(67, 192, 138, 0.4);
+}
+
+.no {
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6b7a 100%);
+  box-shadow: 0 4px 12px rgba(255, 107, 122, 0.4);
+}
+
+.start-btn, .retry-btn {
+  background: linear-gradient(135deg, #ffb347 0%, #ff7e5f 100%);
+  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.4);
+  font-size: 20px;
+  padding: 20px;
+}
+
+/* プログレスバー */
+.progress-wrap {
+  margin-bottom: 20px;
+}
+
+.progress-text {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #ff7e5f;
+}
+
+.progress-bar {
+  background: #ffe8d6;
+  border-radius: 50px;
+  height: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #ffd93d, #ff8c69, #ff6b9d);
+  height: 100%;
+  border-radius: 50px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(255,140,105,0.5);
+}
+
+/* 結果画像 */
+.result-img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 20px;
+  margin: 16px auto;
+  display: block;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.6); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.result-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+  display: inline-block;
+  animation: wiggle 1.5s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.result-name {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ff6f61;
+  margin: 8px 0;
+  text-shadow: 2px 2px 0 #fff8ee;
+}
+
+.result-desc {
+  text-align: left;
+  background: #fff8ee;
+  padding: 18px;
+  border-radius: 16px;
+  border-left: 6px solid #ffc857;
+  font-size: 15px;
+}
+
+/* シェアボタン */
+.share-area {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px dashed #ffd1b3;
+}
+
+.share-label {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.share-btn {
+  background: #1da1f2;
+  font-size: 16px;
+  padding: 12px;
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="app"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+<script>
+// ===== 画像パスをここで管理 =====
+const LOGO_IMG = "logo.png"; // スタート画面のロゴ画像
+
+const types = {
+  leader: {
+    name: "リーダー型",
+    icon: "👑",
+    desc: "周囲をまとめる力があり、状況判断にも優れています。地域の見守り活動では中心的な役割を担い、チームを引っ張る存在です。困っている人を見つけると率先して動き、周囲を巻き込んで課題解決に導く力があります。",
+    img: "result_leader.png"
+  },
+  guardian: {
+    name: "ガーディアン型",
+    icon: "🛡️",
+    desc: "責任感が強く、継続的に見守ることが得意なタイプです。地域の安全を守る意識が高く、日々の積み重ねを大切にします。目立たなくても確実に役割を果たし、安心感を与える存在として活躍できます。",
+    img: "result_guardian.png"
+  },
+  active: {
+    name: "アクティブ型",
+    icon: "🏃",
+    desc: "フットワークが軽く、行動力に優れています。地域イベントや巡回など、体を動かす活動に向いています。新しいことにも積極的に挑戦し、現場での対応力が高いのが特徴です。",
+    img: "result_active.png"
+  },
+  supporter: {
+    name: "サポーター型",
+    icon: "🤝",
+    desc: "人の話をよく聞き、支えることが得意なタイプです。困っている人に寄り添い、安心感を与えることができます。チームの裏方としても重要な役割を担い、周囲の活動を円滑に進めます。",
+    img: "result_supporter.png"
+  },
+  planner: {
+    name: "プランナー型",
+    icon: "📋",
+    desc: "計画を立てるのが得意で、全体を見渡す力があります。見守り活動のスケジュール管理や仕組みづくりに向いています。効率的で無理のない活動を支える重要な存在です。",
+    img: "result_planner.png"
+  },
+  creator: {
+    name: "クリエイター型",
+    icon: "💡",
+    desc: "発想力が豊かで、新しいアイデアを生み出すのが得意です。地域の見守り活動に新しい視点を取り入れ、広報や企画などで活躍できます。人を惹きつける工夫ができるタイプです。",
+    img: "result_creator.png"
+  }
+};
+
+const questions = [
+  { text: "人をまとめる役割を任されることが多い", yes: "leader", no: "supporter" },
+  { text: "コツコツと継続することが得意だ", yes: "guardian", no: "active" },
+  { text: "体を動かす活動が好きだ", yes: "active", no: "planner" },
+  { text: "人の相談に乗ることが多い", yes: "supporter", no: "leader" },
+  { text: "計画を立てるのが好きだ", yes: "planner", no: "creator" },
+  { text: "新しいアイデアを考えるのが好きだ", yes: "creator", no: "guardian" }
+];
+
+let current = 0;
+let scores = {};
+
+function initScores() {
+  scores = {};
+  for (let key in types) scores[key] = 0;
+}
+
+// アニメーション再生用：containerをリフレッシュ
+function refreshAnimation() {
+  const app = document.getElementById("app");
+  app.style.animation = "none";
+  void app.offsetWidth;
+  app.style.animation = "";
+}
+
+function renderStart() {
+  document.getElementById("app").innerHTML = `
+    <img src="${LOGO_IMG}" alt="地域見守り隊 適性タイプ診断" class="logo">
+    <p>6つの質問に答えるだけで、<br>あなたにぴったりの<br><strong style="color:#ff6f61;">見守りタイプ</strong>が分かります！</p>
+    <button class="start-btn" onclick="start()">診断をはじめる ✨</button>
+  `;
+  refreshAnimation();
+}
+
+function start() {
+  current = 0;
+  initScores();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  const percent = ((current) / questions.length) * 100;
+
+  document.getElementById("app").innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-text">質問 ${current + 1} / ${questions.length}</div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${percent}%"></div>
+      </div>
+    </div>
+    <div class="question-text">${q.text}</div>
+    <button class="yes" onclick="answer(true)">はい 😊</button>
+    <button class="no" onclick="answer(false)">いいえ 🤔</button>
+  `;
+
+  // バーをアニメーションで埋める
+  setTimeout(() => {
+    const fill = document.querySelector(".progress-fill");
+    if (fill) fill.style.width = (((current + 1) / questions.length) * 100) + "%";
+  }, 100);
+
+  refreshAnimation();
+}
+
+function answer(isYes) {
+  const q = questions[current];
+  const type = isYes ? q.yes : q.no;
+  scores[type]++;
+
+  current++;
+  if (current < questions.length) {
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  let maxType = null;
+  let maxScore = -1;
+
+  for (let key in scores) {
+    if (scores[key] > maxScore) {
+      maxScore = scores[key];
+      maxType = key;
+    }
+  }
+
+  const result = types[maxType];
+  const shareText = encodeURIComponent(`私の見守り適性は「${result.name}」でした！ ${result.icon}`);
+
+  document.getElementById("app").innerHTML = `
+    <div class="result-icon">${result.icon}</div>
+    <div class="result-name">${result.name}</div>
+    <img src="${result.img}" alt="${result.name}" class="result-img">
+    <p class="result-desc">${result.desc}</p>
+    <button class="retry-btn" onclick="renderStart()">もう一度診断する 🔄</button>
+    <div class="share-area">
+      <div class="share-label">結果をシェアしよう</div>
+      <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" rel="noopener">
+        <button class="share-btn">Xでシェア</button>
+      </a>
+    </div>
+  `;
+
+  refreshAnimation();
+
+  // 紙吹雪演出
+  setTimeout(() => {
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.4 },
+      colors: ['#ff6f61', '#ffc857', '#ff9a9e', '#6dd5a7', '#ffd93d']
+    });
+  }, 300);
+}
+
+renderStart();
+</script>
+
+</body>
+</html>
